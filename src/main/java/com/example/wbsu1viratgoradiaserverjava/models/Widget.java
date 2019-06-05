@@ -1,18 +1,27 @@
 package com.example.wbsu1viratgoradiaserverjava.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Widget {
 
-    enum Type {
-        Heading, List, Paragraph, Image, YouTube, HTML;
+    public enum Type {
+        Heading, List, Paragraph, Image, Link;
     }
 
-    enum DataType {
+    public enum DataType {
         Integer, String, Date, Boolean;
     }
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
+
     private String name;
-    private int order;
+    private int ordr;
     private String text;
     private String url;
     private int size;
@@ -80,12 +89,12 @@ public class Widget {
         return this.id;
     }
 
-    public int getOrder() {
-        return order;
+    public int getOrdr() {
+        return ordr;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setOrdr(int order) {
+        this.ordr = order;
     }
 
     public int getSize() {
