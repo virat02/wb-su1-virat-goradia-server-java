@@ -32,6 +32,15 @@ public class Widget {
     private String value;
     private Type type;
     private DataType dataType;
+    private String listType;
+
+    public String getListType() {
+        return listType;
+    }
+
+    public void setListType(String listType) {
+        this.listType = listType;
+    }
 
     public void setName(String name) {
         this.name = name;

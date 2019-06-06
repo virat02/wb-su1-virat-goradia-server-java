@@ -48,6 +48,8 @@ public class WidgetController {
         widget.setText(newWidget.getText());
         widget.setName(newWidget.getName());
         widget.setType(newWidget.getType());
+        widget.setSize(newWidget.getSize());
+        widget.setListType(newWidget.getListType());
 
         //Save the updated widget to the database
         widgetRepository.save(widget);
