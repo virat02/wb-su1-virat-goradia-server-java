@@ -1,4 +1,4 @@
-package com.example.wbsu1viratgoradiaserverjava.controllers;
+package com.example.wbsu1viratgoradiaserverjava.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins="*",maxAge=3600)
-public class WidgetController {
+public class WidgetService {
 
     @Autowired
     WidgetRepository widgetRepository;
@@ -44,12 +44,8 @@ public class WidgetController {
 
         //Update the widget
         widget.setOrdr(newWidget.getOrdr());
-        widget.setUrl(newWidget.getUrl());
-        widget.setText(newWidget.getText());
         widget.setName(newWidget.getName());
         widget.setType(newWidget.getType());
-        widget.setSize(newWidget.getSize());
-        widget.setListType(newWidget.getListType());
 
         //Save the updated widget to the database
         widgetRepository.save(widget);

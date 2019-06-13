@@ -1,12 +1,13 @@
 package com.example.wbsu1viratgoradiaserverjava.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
-public class Widget {
+@Table(name = "Widgets")
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Widget {
 
     public enum Type {
         Heading, List, Paragraph, Image, Link;
@@ -20,11 +21,12 @@ public class Widget {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
+    @ManyToOne()
+    @JsonIgnore
+    private Topic topic;
+
     private String name;
     private int ordr;
-    private String text;
-    private String url;
-    private int size;
     private int width;
     private int height;
     private String cssClass;
@@ -32,15 +34,6 @@ public class Widget {
     private String value;
     private Type type;
     private DataType dataType;
-    private String listType;
-
-    public String getListType() {
-        return listType;
-    }
-
-    public void setListType(String listType) {
-        this.listType = listType;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -48,22 +41,6 @@ public class Widget {
 
     public String getName() {
         return this.name;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getText() {
-        return this.text;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUrl() {
-        return this.url;
     }
 
     public void setCssClass(String cssClass) {
@@ -106,14 +83,6 @@ public class Widget {
         this.ordr = order;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
     public int getWidth() {
         return width;
     }
@@ -146,5 +115,12 @@ public class Widget {
         this.dataType = dataType;
     }
 
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
 }
 
