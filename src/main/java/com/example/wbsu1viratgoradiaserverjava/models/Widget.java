@@ -6,8 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Widgets")
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Widget {
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+public class Widget {
 
     public enum Type {
         Heading, List, Paragraph, Image, Link;
@@ -18,7 +18,7 @@ public abstract class Widget {
     }
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.TABLE)
     private int id;
 
     @ManyToOne()
