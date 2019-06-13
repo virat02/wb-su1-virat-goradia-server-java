@@ -11,7 +11,7 @@ public class Course {
     private int courseId;
     private String title;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Module> modules;
 
     public int getCourseId() {

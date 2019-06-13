@@ -20,7 +20,7 @@ public class Lesson {
     @JsonIgnore
     private Module module;
 
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Topic> topics;
 
     public int getLessonId() {

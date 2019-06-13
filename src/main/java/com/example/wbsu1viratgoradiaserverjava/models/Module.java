@@ -19,7 +19,7 @@ public class Module{
     @JsonIgnore
     private Course course;
 
-    @OneToMany(mappedBy = "module")
+    @OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Lesson> lessons;
 
     public int getModuleId() {

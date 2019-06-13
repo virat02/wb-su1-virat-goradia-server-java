@@ -18,7 +18,7 @@ public class Topic {
     @JsonIgnore
     private Lesson lesson;
 
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(mappedBy = "topic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Widget> widgets;
 
     public int getId() {
