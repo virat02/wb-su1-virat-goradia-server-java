@@ -1,9 +1,12 @@
 package com.example.wbsu1viratgoradiaserverjava.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.wbsu1viratgoradiaserverjava.models.Topic;
 import com.example.wbsu1viratgoradiaserverjava.models.Widget;
+import com.example.wbsu1viratgoradiaserverjava.repository.TopicRepository;
 import com.example.wbsu1viratgoradiaserverjava.repository.WidgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,49 +16,55 @@ import org.springframework.web.bind.annotation.*;
 public class WidgetService {
 
     @Autowired
+    TopicRepository topicRepository;
+
+    @Autowired
     WidgetRepository widgetRepository;
 
-    @GetMapping("/api/widgets")
-    public List<Widget> findAllWidgets() {
-        return (List<Widget>) widgetRepository.findAll();
+    @GetMapping("/api/topics/{tid}/widgets")
+    public List<Widget> findAllWidgets(@PathVariable("tid") int tid){
+        Optional<Topic> topic = topicRepository.findById(tid);
+        if(topic.isPresent()) {
+            return (List<Widget>) widgetRepository.findWidgetsForTopic(topic.get());
+        }
+        return new ArrayList<>();
     }
 
-    @GetMapping("/api/widgets/{widgetId}")
-    public Widget findWidgetById(@PathVariable("widgetId") Integer widgetId) {
-        Optional<Widget> widget = widgetRepository.findById(widgetId);
-        return widget.get();
+    @GetMapping("/api/widgets/{wid}")
+    public Optional<Widget> findWidgetById(@PathVariable("wid") int wid) {
+        return widgetRepository.findById(wid);
     }
 
-    @PostMapping(path= "/api/widgets", consumes = "application/json",
-            produces = "application/json")
-    public List<Widget> createWidget(@RequestBody Widget widget) {
-        widgetRepository.save(widget);
-        return findAllWidgets();
+    @PostMapping("/api/topics/{tid}/widget")
+    public Widget addWidget(@PathVariable("tid") int tid,
+                            @RequestBody Widget w) {
+        Optional<Topic> t = topicRepository.findById(tid);
+        if(t.isPresent()) {
+            List<Widget> widgets = t.get().getWidgets();
+            widgets.add(w);
+            t.get().setWidgets(widgets);
+
+            w.setTopic(t.get());
+            widgetRepository.save(w);
+            return w;
+        }
+        return null;
     }
 
-
-    @PutMapping(path= "/api/widgets/{widgetId}", consumes = "application/json",
-            produces = "application/json")
-    public List<Widget> updateWidget(@PathVariable("widgetId") Integer id, @RequestBody Widget newWidget) {
-
-        //Get the widget to update
-        Optional<Widget> optional = widgetRepository.findById(id);
-        Widget widget = optional.get();
-
-        //Update the widget
-        widget.setOrdr(newWidget.getOrdr());
-        widget.setName(newWidget.getName());
-        widget.setType(newWidget.getType());
-
-        //Save the updated widget to the database
-        widgetRepository.save(widget);
-        return findAllWidgets();
+    @PutMapping("/api/widgets/{wid}")
+    public void updateWidget(@PathVariable("wid") int wid,
+                             @RequestBody Widget newWidget) {
+        Optional<Widget> w = widgetRepository.findById(wid);
+        if(w.isPresent()) {
+            w.get().setType(newWidget.getType());
+            w.get().setTopic(newWidget.getTopic());
+            w.get().setName(newWidget.getName());
+            widgetRepository.save(w.get());
+        }
     }
 
-    @DeleteMapping("/api/widgets/{widgetId}")
-    public List<Widget> deleteWidget(@PathVariable("widgetId") Integer id) {
-
-        widgetRepository.deleteById(id);
-        return findAllWidgets();
+    @DeleteMapping("/api/widgets/{wid}")
+    public void deleteWidget(@PathVariable("wid") int wid) {
+        widgetRepository.deleteById(wid);
     }
 }
